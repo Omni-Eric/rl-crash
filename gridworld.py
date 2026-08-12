@@ -3,7 +3,7 @@ import numpy as np
 # S = 5*5 table, 25 grid positions, (0,0) start, (4,4) goal
 # A = 0 = up, 1 = right, 2 = down, 3 = left
 # R = -1 for each step, 0 for the goal
-# P = action probabilities are deterministic,
+# P = transitions are deterministic,
 # given a state and action, there is one resulting next state.
 # Attempting to cross a boundary results in no movement.
 # γ = used by agent later
@@ -54,19 +54,19 @@ class GridWorld:
         state = row * self.size + col
         return state
 
-    def run_random_episode(self):
+def run_random_episode(env):       # Seperate agent and environment class
         rng = np.random.default_rng()
+        env.reset()     # Reset environment for next episode
         total_reward = 0
         total_steps = 0
 
         while(True):
-            action = rng.integers(4)
-            a, b, c = self.step(action)
-            total_reward += b
+            action = rng.integers(env.n_actions)
+            position, reward, done = env.step(action)
+            total_reward += reward
             total_steps += 1
 
-            if(c == True):
-                self.reset()
+            if(done == True):
                 break
 
         return total_reward, total_steps
@@ -76,15 +76,11 @@ class GridWorld:
 
 
 
-env1 = GridWorld()
-env2 = GridWorld()
-env3 = GridWorld()
-env4 = GridWorld()
-env5 = GridWorld()
+env1 = GridWorld()      # Testing
+print(run_random_episode(env1))
+print(run_random_episode(env1))
+print(run_random_episode(env1))
+print(run_random_episode(env1))
+print(run_random_episode(env1))
 
-print(env1.run_random_episode())
-print(env2.run_random_episode())
-print(env3.run_random_episode())
-print(env4.run_random_episode())
-print(env5.run_random_episode())
 
