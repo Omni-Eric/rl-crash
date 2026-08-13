@@ -1,3 +1,9 @@
+# Reinforcement Learning from Scratch
+
+A small reinforcement learning project implementing tabular Q-learning from scratch in Python and NumPy.
+
+I built a custom deterministic 5×5 GridWorld environment and trained an agent using epsilon-greedy Q-learning. The project explores how learning rate and exploration rate affect training behavior and compares the learned greedy policies.
+
 ## Q-Learning Experiments
 
 I compared three hyperparameter configurations over 500 episodes:
