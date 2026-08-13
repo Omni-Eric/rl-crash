@@ -1,9 +1,7 @@
 import numpy as np
 from gridworld import GridWorld
 
-env = GridWorld()       #initialize environment and Q table
-Q = np.zeros((env.n_states, env.n_actions))
-print(Q.shape)
+env = GridWorld()       #initialize environment
 
 def epsilon_greedy(Q, state, epsilon, rng):
     r_number1 = rng.random()
@@ -13,47 +11,61 @@ def epsilon_greedy(Q, state, epsilon, rng):
     else:
         return np.argmax(Q[state])
 
-env.reset()     # Set up before training
-state = env.convert(env.position)
-done = False
-total_reward = 0
-steps = 0
-rng = np.random.default_rng()
-alpha = 0.3
-gamma = 0.8
+def train_q_learning(
+    env,
+    episodes,
+    alpha,
+    gamma,
+    epsilon,
+    seed
+):
+    Q = np.zeros((env.n_states, env.n_actions))
+    rng = np.random.default_rng(seed)
+    episode_returns = []
+    episode_steps = []
 
-while(not done):        # One training episode
-    action = epsilon_greedy(Q, state, 0.1, rng)
-    next_position, reward, done = env.step(action)
-    next_state = env.convert(next_position)
-    old_q = Q[state, action]
+    for i in range(episodes):
+        position = env.reset()     # Set up before training
+        state = env.convert(position)
+        done = False
+        total_reward = 0
+        steps = 0
 
-    if done:
-        target = reward
-    else:
-        best_next_q = np.max(Q[next_state])
-        target = reward + gamma * (best_next_q)
+        while(not done):        # One training episode
+            action = epsilon_greedy(Q, state, epsilon, rng)
+            next_position, reward, done = env.step(action)
+            next_state = env.convert(next_position)
+            old_q = Q[state, action]
 
-    td_error = target - old_q
-    Q[state, action] = old_q + alpha * td_error # update the q table
+            if done:
+                target = reward
+            else:
+                best_next_q = np.max(Q[next_state])
+                target = reward + gamma * (best_next_q)
 
-    total_reward += reward
-    steps += 1
+            td_error = target - old_q
+            Q[state, action] = old_q + alpha * td_error # update the q table
 
-    print(
-    "state:", state,
-    "action:", action,
-    "reward:", reward,
-    "next_state:", next_state,
-    "old Q:", old_q,
-    "target:", target,
-    "new Q:", Q[state, action]
-)
+            total_reward += reward
+            steps += 1
 
-    state = next_state # Move to next state
+            state = next_state # Move to next state
 
-print("Total reward:", total_reward)
-print("Steps:", steps)
+        episode_returns.append(total_reward)
+        episode_steps.append(steps)
+    return Q, episode_returns, episode_steps
+
+   
+Q, returns, steps = train_q_learning(env, 500, 0.1, 0.9, 0.1, 0)
+print(returns)
+print(steps)
+print(len(returns))
+print(len(steps))
+
+
+
+
+
     
     
 
