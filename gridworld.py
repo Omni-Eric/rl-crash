@@ -75,12 +75,12 @@ def run_random_episode(env):       # Seperate agent and environment class
 
 
 
-
-env1 = GridWorld()      # Testing
-print(run_random_episode(env1))
-print(run_random_episode(env1))
-print(run_random_episode(env1))
-print(run_random_episode(env1))
-print(run_random_episode(env1))
+if __name__ == "__main__":
+    env1 = GridWorld()      # Testing
+    print(run_random_episode(env1))
+    print(run_random_episode(env1))
+    print(run_random_episode(env1))
+    print(run_random_episode(env1))
+    print(run_random_episode(env1))
 
 
