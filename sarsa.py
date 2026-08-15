@@ -3,7 +3,7 @@ import gymnasium as gym
 
 env = gym.make("CliffWalking-v0")       # Set up environment and Q table
 
-def epsilon_greedy(Q, state, epsilon, rng):
+def epsilon_greedy(Q, state, epsilon, rng):     # Same as Q learning
     r_number = rng.random()
 
     if r_number < epsilon:
@@ -31,7 +31,7 @@ def train_sarsa(
     for i in range(episodes):
         state, info = env.reset()
 
-        # TODO 1:
+        
         # SARSA needs an action BEFORE entering the loop.
         action = epsilon_greedy(Q, state, epsilon,rng)
 
@@ -50,11 +50,11 @@ def train_sarsa(
             if terminated:
                 target = reward
             else:
-                # TODO 2:
+                
                 # Choose the ACTUAL next action using epsilon-greedy.
                 next_action = epsilon_greedy(Q, next_state, epsilon,rng)
 
-                # TODO 3:
+                
                 # SARSA uses Q[next_state, next_action]
                 target = reward + gamma * Q[next_state, next_action]
 
@@ -65,7 +65,7 @@ def train_sarsa(
             total_reward += reward
             steps += 1
 
-            # TODO 4:
+           
             # Move both state AND action forward.
             if not done: 
                 state = next_state
