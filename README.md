@@ -72,11 +72,11 @@ Q-learning learned the shortest path directly above the cliff. SARSA learned a l
 
 ### Epsilon = 0.1
 
-![Q-learning vs SARSA, epsilon 0.1](learning_curve.png)
+![Q-learning vs SARSA, epsilon 0.1](figures/learning_curve.png)
 
 ### Epsilon = 0.3
 
-![Q-learning vs SARSA, epsilon 0.3](learning_curve_epsilon_03.png)
+![Q-learning vs SARSA, epsilon 0.3](figures/learning_curve_epsilon_03.png)
 
 With higher exploration, Q-learning's training returns became substantially worse and more variable because exploratory actions near the cliff often caused `-100` penalties. SARSA remained safer because exploration risk affects its learned action values.
 
@@ -90,8 +90,8 @@ See [`summary.md`](summary.md) for the experiment discussion.
 - `sarsa.py` — SARSA using Gymnasium CliffWalking
 - `cliff_compare.py` — trains and compares Q-learning and SARSA
 - `figures/q_learning_comparison.png` — custom GridWorld experiments
-- `learning_curve.png` — CliffWalking comparison with lower exploration
-- `learning_curve_epsilon_03.png` — CliffWalking comparison with higher exploration
+- `figures/learning_curve.png` — CliffWalking comparison with lower exploration
+- `figures/learning_curve_epsilon_03.png` — CliffWalking comparison with higher exploration
 - `summary.md` — research-style experiment summary
 
 ## Setup
