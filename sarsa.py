@@ -1,6 +1,7 @@
 import numpy as np
 import gymnasium as gym
 
+env = gym.make("CliffWalking-v0")       # Set up environment and Q table
 
 def epsilon_greedy(Q, state, epsilon, rng):
     r_number = rng.random()
@@ -19,12 +20,11 @@ def train_sarsa(
     epsilon,
     seed
 ):
-    Q = np.zeros(
-        (env.observation_space.n, env.action_space.n)
-    )
 
     rng = np.random.default_rng(seed)
-
+    Q = np.zeros(
+    (env.observation_space.n, env.action_space.n)
+)
     episode_returns = []
     episode_steps = []
 
@@ -33,7 +33,7 @@ def train_sarsa(
 
         # TODO 1:
         # SARSA needs an action BEFORE entering the loop.
-        action = ???
+        action = epsilon_greedy(Q, state, epsilon,rng)
 
         done = False
         total_reward = 0
@@ -52,11 +52,11 @@ def train_sarsa(
             else:
                 # TODO 2:
                 # Choose the ACTUAL next action using epsilon-greedy.
-                next_action = ???
+                next_action = epsilon_greedy(Q, next_state, epsilon,rng)
 
                 # TODO 3:
                 # SARSA uses Q[next_state, next_action]
-                target = ???
+                target = reward + gamma * Q[next_state, next_action]
 
             td_error = target - old_q
 
@@ -67,10 +67,51 @@ def train_sarsa(
 
             # TODO 4:
             # Move both state AND action forward.
-            state = ???
-            action = ???
+            if not done: 
+                state = next_state
+                action = next_action
 
         episode_returns.append(total_reward)
         episode_steps.append(steps)
 
     return Q, episode_returns, episode_steps
+
+
+def evaluate_sarsa(env, Q):
+    state, info = env.reset()
+
+    done = False
+    total_reward = 0
+    steps = 0
+
+    while not done:
+        action = np.argmax(Q[state])
+
+        next_state, reward, terminated, truncated, info = env.step(action)
+
+        done = terminated or truncated
+
+        total_reward += reward
+        steps += 1
+        state = next_state
+
+    return total_reward, steps
+
+Q, episode_returns, episode_steps = train_sarsa(       # Testing
+    env=env,
+    episodes=500,
+    alpha=0.5,
+    gamma=1.0,
+    epsilon=0.1,
+    seed=42
+)
+
+print("Training finished")
+print("Q-table shape:", Q.shape)
+print("Last 10 returns:", episode_returns[-10:])
+print("Last 10 episode steps:", episode_steps[-10:])
+
+reward, steps = evaluate_sarsa(env, Q)
+
+print("Evaluation return:", reward)
+print("Evaluation steps:", steps)

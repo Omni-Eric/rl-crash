@@ -2,9 +2,6 @@ import numpy as np
 import gymnasium as gym
 
 env = gym.make("CliffWalking-v0")       # Set up environment and Q table
-Q = np.zeros(
-    (env.observation_space.n, env.action_space.n)
-)
 
 def epsilon_greedy(Q, state, epsilon, rng):     # Policy, involves exploration
     r_number1 = rng.random()
